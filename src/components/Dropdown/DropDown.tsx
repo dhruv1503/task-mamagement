@@ -10,18 +10,18 @@ type DropDownItemProps = {
 };
 
 type DropDownProps = {
-  value?: string | number | null;
+  value?: string | number | undefined;
   options?: Array<DropDownItemProps> | [];
   label?: string;
   placeholder?: string;
   seletedId?: string;
-  onSelect?: (value: string | number) => void | string | number;
+  onSelect?: (value: string | number | undefined) => void;
   children?: ReactNode | Array<ReactNode>;
   prefix?: string;
 };
 
 export const DropDown: FunctionComponent<DropDownProps> = ({
-  value = null,
+  value = "",
   options = [],
   placeholder = "",
   onSelect = () => {},
@@ -38,9 +38,14 @@ export const DropDown: FunctionComponent<DropDownProps> = ({
     handler: () => setShowDropdown(false),
   });
 
-  const handleOptionSelected = (value: number | string) => {
-    setSelectedValue(value);
-    onSelect(value);
+  const handleOptionSelected = (value: number | string | undefined) => {
+    if (value) {
+      setSelectedValue(value);
+      onSelect(value);
+    } else {
+      setSelectedValue("");
+      onSelect("");
+    }
     setShowDropdown(false);
   };
 
