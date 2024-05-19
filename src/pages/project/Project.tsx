@@ -51,7 +51,7 @@ export const Project: FunctionComponent = () => {
       </section>
       {/* <section onClick={() => (dispatch({type: "ADD_TASK", projectName : requiredProjects?.name}))}>Add Task section</section> */}
       {!addTask && <section onClick={() => (setAddTask(true))}>Add Task section</section>}
-      {addTask && <AddTask onCancelClick={() => (setAddTask(false))}/> }
+      {addTask && <AddTask project={projectName} onCancelClick={() => (setAddTask(false))}/> }
       
     </SidebarLayout>
   );

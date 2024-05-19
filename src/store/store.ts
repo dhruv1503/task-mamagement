@@ -14,11 +14,15 @@ const devToolEnahncer = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DE
 
 const projectReducer = (state = data.projects, action : any) => {
     if(action.type === ADD_TASK){
-     const projectIndexToBeEdited = state.findIndex((project) => (project.name === action.projectName));
+        console.log(action)
+     const projectIndexToBeEdited = state.findIndex((project) => (project.name === action.task.project));
+     console.log(state)
+     console.log(projectIndexToBeEdited)
      const projectToEdited = state[projectIndexToBeEdited]; 
+     console.log(projectToEdited)
      const updatedProject = {
         ...projectToEdited,
-        tasks: [...projectToEdited.tasks, { id: uuid(), title: "New Task" }]
+        tasks: [...projectToEdited.tasks, { id: uuid(), ...action.task }]
     };
     const newState = [
         ...state.slice(0, projectIndexToBeEdited),

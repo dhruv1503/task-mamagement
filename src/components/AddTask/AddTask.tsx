@@ -5,17 +5,21 @@ import { IPriority } from "../../interface/Priority.interface";
 import { v4 as uuid } from "uuid";
 import { DropDown } from "../Dropdown/DropDown";
 import { DateChangeEvent, DatePicker } from "../DatePicker/DatePicker";
+import { useDispatch } from "react-redux";
 
 type AddTaskProps = {
   onCancelClick?: React.MouseEventHandler<HTMLButtonElement>;
   onSubmitClick?: (event: React.FormEvent<HTMLFormElement>) => void;
+  project? : string
 };
 
 export const AddTask: FunctionComponent<AddTaskProps> = ({
   onCancelClick,
   onSubmitClick = () => {},
+  project = "Unassigned"
 }) => {
   const [title, setTitle] = useState<string | undefined>("");
+  const [description, setDescription] = useState<string | undefined>("");
   const [startDate, setStateDate] = useState<DateChangeEvent>({
     dateObject: new Date(),
     dateInMilliseconds: 0,
@@ -27,6 +31,7 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
     dateString: "",
   });
   const priortyData: Array<IPriority> = priority;
+  const dispatch = useDispatch()
 
   const startDateChange = (dateChangeEvent: DateChangeEvent) => {
     setStateDate(dateChangeEvent);
@@ -39,11 +44,14 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmitClick(event);
-    console.log(event);
+    if(title){
+        dispatch({type : "ADD_TASK", task : {title, description, project}})
+    }
+    
   };
 
   return (
-    <section className="border border-gray-300 rounded max-w-[80%] w-full px-4 py-3 mt-3">
+    <section className="border border-gray-300 rounded max-w-[80%] w-full px-4 py-3 mt-3 shadow-lg">
       <form onSubmit={handleSubmit}>
         <div className="border-b border-b-gray-300 pb-3"> 
         <Input
@@ -67,7 +75,14 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
           name="Description"
           placeholder="Description"
           defaultValue=""
-          onChange={(e) => e.target.value}
+          onChange={(event) => {
+            if (event.target.value) {
+              setDescription(event.target.value);
+            }
+            else{
+                setDescription("")
+            }
+          }}
         />
         <section className="flex gap-2 items-center">
           <DropDown options={priortyData} prefix="P " placeholder="Priority" />
