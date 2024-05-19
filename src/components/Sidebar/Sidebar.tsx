@@ -1,18 +1,16 @@
 import { FunctionComponent, ReactNode } from "react";
 import data from "../../data/data.json";
 import { IProject } from "../../interface/Project.interface";
-import { Link, useNavigate } from "react-router-dom";
-import { HomeIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
+import { Link} from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
 type SidebarProps = {
   children?: ReactNode;
 };
 
-export const Sidebar: FunctionComponent<SidebarProps> = ({ children }) => {
+export const Sidebar: FunctionComponent<SidebarProps> = () => {
   const projects: Array<IProject> | null = data.projects;
   const user = data.user;
-  const navigate = useNavigate();
   return (
     <aside className="max-h-screen h-screen px-3 py-4 border bg-slate-50 hidden md:block md:col-span-3 transition-all duration-150 ease-in-out lg:col-span-2 p-4 shadow-lg">
       <section>

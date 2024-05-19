@@ -1,9 +1,8 @@
-import React, {
+import  {
   FunctionComponent,
   ChangeEvent,
   ChangeEventHandler,
   useState,
-  EventHandler,
 } from "react";
 
 type InputProps = {
@@ -24,10 +23,10 @@ export const Input: FunctionComponent<InputProps> = ({
   label,
   type,
   placeholder,
-  value,
+  // value,
   name,
-  error,
-  errorMessage,
+  // error,
+  // errorMessage,
   onChange,
   disabled,
   className,

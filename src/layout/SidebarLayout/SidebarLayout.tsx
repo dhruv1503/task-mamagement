@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode } from "react";
+import { FunctionComponent, ReactNode } from "react";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 

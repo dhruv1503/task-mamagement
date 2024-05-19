@@ -2,10 +2,8 @@ import { FunctionComponent, useState } from "react";
 import { SidebarLayout } from "../../layout/SidebarLayout/SidebarLayout";
 import { useParams } from "react-router-dom";
 // import { useParams } from "react-router-dom";
-import data from "../../data/data.json";
-import { ITask } from "../../interface/Task.interface";
 import { IProject } from "../../interface/Project.interface";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { AddTask } from "../../components/AddTask/AddTask";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
@@ -15,7 +13,6 @@ type CatgeoryParams = {
 
 export const Project: FunctionComponent = () => {
   const { projectName } = useParams<CatgeoryParams>();
-  const dispatch = useDispatch();
   const projectData = useSelector((state : any) => (state.projects));
   const [addTask, setAddTask] = useState<boolean>(false)
 

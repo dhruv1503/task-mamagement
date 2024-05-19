@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Input } from "../Input/Input";
 import priority from "../../data/priority.json";
 import { IPriority } from "../../interface/Priority.interface";
-import { v4 as uuid } from "uuid";
 import { DropDown } from "../Dropdown/DropDown";
 import { DateChangeEvent, DatePicker } from "../DatePicker/DatePicker";
 import { useDispatch } from "react-redux";
