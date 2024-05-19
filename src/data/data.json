@@ -1,0 +1,87 @@
+{
+  "user": {
+    "id": "1",
+    "firstName": "Dhruv",
+    "lastName": "Aggarwal",
+    "emailId": "dhruvaggarwal1503@gmail.com",
+    "password": "123456",
+    "countryCode": "91",
+    "isCompany": false,
+    "companyName": ""
+  },
+  "securityQuestions": [
+    {
+      "id" : 1,
+      "question": "What is your graduation year?",
+      "answer": "2022"
+    },
+    {
+      "id" : 2,
+      "question": "What is your pets name?",
+      "answer": "casper"
+    }
+  ],
+  "projects": [
+    {
+      "id" : 1,
+      "name": "Personal_Projects",
+      "count": 5,
+      "tasks": [
+        {
+          "id" : 1,
+          "title": "Create Components",
+          "description": "Buttons, navbar, sidebar, Pop ups",
+          "priority": "",
+          "beginDate": "",
+          "endDate": "",
+          "status": "todo",
+          "project": "Personal_Projects"
+        },
+        {
+          "id" : 2,
+          "title": "Create Overview Page",
+          "description": "",
+          "priority": "",
+          "beginDate": "",
+          "endDate": "",
+          "status": "todo",
+          "project": "Personal_Projects"
+        },
+        {
+          "id" : 3,
+          "title": "Category Page",
+          "description": "Task Listing, edit tasks, edit category name",
+          "priority": "",
+          "beginDate": "",
+          "endDate": "",
+          "status": "todo",
+          "project": "Personal_Projects"
+        }
+      ]
+    },
+    {
+      "id" : 2,
+      "name": "House_Work",
+      "count": 5,
+      "tasks": []
+    },
+    {
+      "id" : 3,
+      "name": "Upskilling",
+      "count": 5,
+      "tasks": []
+    },
+    {
+      "id" : 4,
+      "name": "Gym_Training",
+      "count": 5,
+      "tasks": []
+    },
+    {
+      "id" : 5,
+      "name": "Office_Presentation",
+      "count": 5,
+      "tasks": []
+    }
+  ]
+}
