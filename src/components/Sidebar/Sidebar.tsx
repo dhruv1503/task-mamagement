@@ -1,8 +1,8 @@
 import { FunctionComponent, ReactNode } from "react";
 import data from "../../data/data.json";
 import { IProject } from "../../interface/Project.interface";
-import { Link } from "react-router-dom";
-import { PlusCircleIcon } from "@heroicons/react/20/solid";
+import { Link, useNavigate } from "react-router-dom";
+import { HomeIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
 type SidebarProps = {
@@ -12,12 +12,13 @@ type SidebarProps = {
 export const Sidebar: FunctionComponent<SidebarProps> = ({ children }) => {
   const projects: Array<IProject> | null = data.projects;
   const user = data.user;
+  const navigate = useNavigate();
   return (
-    <aside className="max-h-screen h-screen px-3 py-4 border bg-slate-50 hidden md:block md:col-span-3 lg:col-span-2 p-4 shadow-lg">
+    <aside className="max-h-screen h-screen px-3 py-4 border bg-slate-50 hidden md:block md:col-span-3 transition-all duration-150 ease-in-out lg:col-span-2 p-4 shadow-lg">
       <section>
         <p>Hello, {user.firstName}</p>
       </section>
-      <section>
+      <section className="flex flex-col gap-2">
         <button className="my-2 px-3 py-2 hover:bg-slate-200 rounded transition-colors ease-in-out delay-75 duration-300 active:bg-slate-400 active:scale-y-95 active:scale-x-95 ">
           {" "}
           <PlusIcon
@@ -27,6 +28,15 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({ children }) => {
           />{" "}
           Add Task
         </button>
+        {/* <button className="my-2 px-3 py-2 hover:bg-slate-200 rounded transition-colors ease-in-out delay-75 duration-300 active:bg-slate-400 active:scale-y-95 active:scale-x-95 " onClick={() => (navigate("/"))}>
+          {" "}
+          <HomeIcon
+            className="inline-block align-baseline"
+            height="15px"
+            width="15px"
+          />{" "}
+          Home
+        </button> */}
       </section>
       <p className="text-md font-semibold">My Projects</p>
       <ul>

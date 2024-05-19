@@ -7,6 +7,7 @@ import { ITask } from "../../interface/Task.interface";
 import { IProject } from "../../interface/Project.interface";
 import { useDispatch, useSelector } from "react-redux";
 import { AddTask } from "../../components/AddTask/AddTask";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
 type CatgeoryParams = {
   projectName: string;
@@ -50,7 +51,15 @@ export const Project: FunctionComponent = () => {
         )}
       </section>
       {/* <section onClick={() => (dispatch({type: "ADD_TASK", projectName : requiredProjects?.name}))}>Add Task section</section> */}
-      {!addTask && <section onClick={() => (setAddTask(true))}>Add Task section</section>}
+      {!addTask &&  <button className="my-2 px-3 py-2 hover:bg-slate-200 rounded transition-colors ease-in-out delay-75 duration-300 active:bg-slate-400 active:scale-y-95 active:scale-x-95 " onClick={() => setAddTask(true)}>
+          {" "}
+          <PlusIcon
+            className="inline-block align-baseline"
+            height="15px"
+            width="15px"
+          />{" "}
+          Add Task
+        </button>}
       {addTask && <AddTask project={projectName} onCancelClick={() => (setAddTask(false))}/> }
       
     </SidebarLayout>
