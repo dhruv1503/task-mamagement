@@ -23,7 +23,7 @@ export const Input: FunctionComponent<InputProps> = ({
   label,
   type,
   placeholder,
-  // value,
+  value,
   name,
   // error,
   // errorMessage,
@@ -32,14 +32,14 @@ export const Input: FunctionComponent<InputProps> = ({
   className,
   defaultValue
 }) => {
-  const [input, setInput] = useState(defaultValue)
+  // const [input, setInput] = useState(defaultValue)
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-    if (onChange) {
-      onChange(event);
-    }
-  };
+  // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setInput(event.target.value);
+  //   if (onChange) {
+  //     onChange(event);
+  //   }
+  // };
 
   return (
     <div className="flex flex-col gap-1">
@@ -49,8 +49,8 @@ export const Input: FunctionComponent<InputProps> = ({
         name={name}
         type={type}
         placeholder={placeholder}
-        value={input}
-        onChange={handleInputChange}
+        value={value}
+        onChange={onChange}
         disabled={disabled}
       />
     </div>

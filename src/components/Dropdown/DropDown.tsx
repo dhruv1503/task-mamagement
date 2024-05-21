@@ -5,32 +5,28 @@ import { useOutsideClick } from "../../hooks/useOutsideClick";
 type DropDownItemProps = {
   id: number | string;
   value: string;
-  prefix?: HTMLElement;
+  prefix?: HTMLElement | string;
   postfix?: HTMLElement;
 };
 
 type DropDownProps = {
-  value?: string | number | undefined;
-  options?: Array<DropDownItemProps> | [];
+  value: string | number | undefined;
+  options?: Array<DropDownItemProps>;
   label?: string;
   placeholder?: string;
-  seletedId?: string;
-  onSelect?: (value: string | number | undefined) => void;
+  onSelect: (value: string | number | undefined) => void;
   children?: ReactNode | Array<ReactNode>;
   prefix?: string;
 };
 
 export const DropDown: FunctionComponent<DropDownProps> = ({
-  value = "",
+  value,
   options = [],
   placeholder = "",
-  onSelect = () => {},
+  onSelect,
   prefix = "",
 }) => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-  const [selectedValue, setSelectedValue] = useState<number | string | null>(
-    value
-  );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick({
@@ -39,50 +35,40 @@ export const DropDown: FunctionComponent<DropDownProps> = ({
   });
 
   const handleOptionSelected = (value: number | string | undefined) => {
-    if (value) {
-      setSelectedValue(value);
-      onSelect(value);
-    } else {
-      setSelectedValue("");
-      onSelect("");
-    }
+    onSelect(value);
     setShowDropdown(false);
   };
 
   return (
-    <div className="relative border rounded border-gray-500" ref={dropdownRef}>
+    <div className="relative cursor-pointer border rounded border-gray-500" ref={dropdownRef}>
       <p
         className={
-          selectedValue
-            ? "text-gray-600 italic p-1"
-            : "text-gray-500 not-italic p-1"
+          value ? "text-gray-600 italic p-1" : "text-gray-500 not-italic p-1"
         }
         onClick={() => setShowDropdown(!showDropdown)}
       >
-        {!selectedValue
+        {!value
           ? placeholder
           : prefix
-          ? `${prefix} ${selectedValue}`
-          : selectedValue}
+          ? `${prefix} ${value}`
+          : value}
       </p>
       <div
-        className={`absolute ${
-          showDropdown ? "block" : "hidden"
-        } rounded min-w-36 z-[999]`}
+        className={`absolute ${showDropdown ? "block" : "hidden"} rounded min-w-36 z-[999]`}
       >
         <ul className="bg-white border border-gray-300 rounded">
           {options && options.length > 0 ? (
             options.map(({ id, value, prefix }: DropDownItemProps) => (
               <li
-                key={value}
+                key={id}
                 className={`hover:bg-gray-300 px-3 py-2 cursor-pointer rounded`}
                 role="option"
                 data-value={id}
                 onClick={() => handleOptionSelected(id)}
               >
                 <div className="flex gap-0.5 items-center">
-                  <p>{prefix ? `${prefix} ${value}` : `${value}`}</p>
-                  {selectedValue === id && (
+                  <p>{prefix ? `${prefix} ${value}` : value}</p>
+                  {value === id && (
                     <CheckIcon className="stroke-2 h-3" />
                   )}
                 </div>

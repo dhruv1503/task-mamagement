@@ -4,7 +4,8 @@ import priorityJson from "../../data/priority.json";
 import { IPriority } from "../../interface/Priority.interface";
 import { DropDown } from "../Dropdown/DropDown";
 import { DateChangeEvent, DatePicker } from "../DatePicker/DatePicker";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IProject } from "../../interface/Project.interface";
 
 type AddTaskProps = {
   onCancelClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -20,6 +21,7 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
   const [title, setTitle] = useState<string | undefined>("");
   const [description, setDescription] = useState<string | undefined>("");
   const [priority, setPriority] = useState<string | number | undefined>();
+  const [selectedProject, setSelectedProject] = useState("");
   const [startDate, setStateDate] = useState<DateChangeEvent>({
     dateObject: new Date(),
     dateInMilliseconds: 0,
@@ -30,8 +32,17 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
     dateInMilliseconds: 0,
     dateString: "",
   });
-  const priortyData: Array<IPriority> = priorityJson;
+  const priorityData: Array<IPriority> = priorityJson;
   const dispatch = useDispatch();
+  const projects = useSelector(
+    (state: { user: Object; projects: Array<IProject> }) => state.projects
+  );
+
+  const projectList = projects.map((project) => ({
+    id: project.name,
+    value: project.name.split("_").join(" "),
+    prefix: "#",
+  }));
 
   const startDateChange = (dateChangeEvent: DateChangeEvent) => {
     setStateDate(dateChangeEvent);
@@ -39,6 +50,18 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
 
   const endDateChange = (dateChangeEvent: DateChangeEvent) => {
     setEndDate(dateChangeEvent);
+  };
+
+  const handleProjectChange = (value : string | number | undefined) => {
+    if(!value){
+        setSelectedProject("")
+    }
+    const requiredProject = projectList.find((project) => project.id === value);
+    if (requiredProject) {
+      setSelectedProject(requiredProject?.value);
+    } else {
+      setSelectedProject("");
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -86,15 +109,16 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
           />
           <section className="flex gap-2 items-center">
             <DropDown
-              options={priortyData}
+              options={priorityData}
               prefix="P "
               placeholder="Priority"
               value={priority}
-              onSelect={(value) => setPriority(value)}
+              onSelect={setPriority}
             />
           </section>
         </div>
-        <div className="border-b border-b-gray-300 pb-3">
+
+        <div className="border-b border-b-gray-300 pb-3 mb-3">
           <section className="flex gap-2 flex-col ">
             <DatePicker
               name="start-date"
@@ -110,6 +134,17 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
               label="End Date"
               className="max-w-40 border border-gray-500 p-1 rounded"
             />
+          </section>
+        </div>
+        <div className="border-b border-b-gray-300 pb-3 mb-3">
+            <section className="max-w-60">
+          <DropDown
+            value={selectedProject}
+            placeholder="Project"
+            prefix="#"
+            options={projectList}
+            onSelect={handleProjectChange}
+          />
           </section>
         </div>
         <div className="py-3">
