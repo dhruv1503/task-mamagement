@@ -4,12 +4,12 @@ import priorityJson from "../../data/priority.json";
 import { IPriority } from "../../interface/Priority.interface";
 import { DropDown } from "../Dropdown/DropDown";
 import { DateChangeEvent, DatePicker } from "../DatePicker/DatePicker";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import { IProject } from "../../interface/Project.interface";
 
 type AddTaskProps = {
   onCancelClick?: React.MouseEventHandler<HTMLButtonElement>;
-  onSubmitClick?: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmitClick?: (value : object) => void;
   project?: string;
 };
 
@@ -33,7 +33,6 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
     dateString: "",
   });
   const priorityData: Array<IPriority> = priorityJson;
-  const dispatch = useDispatch();
   const projects = useSelector(
     (state: { user: Object; projects: Array<IProject> }) => state.projects
   );
@@ -66,13 +65,7 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmitClick(event);
-    if (title) {
-      dispatch({
-        type: "ADD_TASK",
-        task: { title, description, project, priority },
-      });
-    }
+    onSubmitClick({title, description, priority});
   };
 
   return (
@@ -136,7 +129,7 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
             />
           </section>
         </div>
-        <div className="border-b border-b-gray-300 pb-3 mb-3">
+        {/* <div className="border-b border-b-gray-300 pb-3 mb-3">
             <section className="max-w-60">
           <DropDown
             value={selectedProject}
@@ -146,7 +139,7 @@ export const AddTask: FunctionComponent<AddTaskProps> = ({
             onSelect={handleProjectChange}
           />
           </section>
-        </div>
+        </div> */}
         <div className="py-3">
           <button
             className="rounded px-2 py-1 text-slate-900 bg-slate-100 mx-2"

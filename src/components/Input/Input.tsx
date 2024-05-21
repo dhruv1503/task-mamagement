@@ -32,14 +32,6 @@ export const Input: FunctionComponent<InputProps> = ({
   className,
   defaultValue
 }) => {
-  // const [input, setInput] = useState(defaultValue)
-
-  // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setInput(event.target.value);
-  //   if (onChange) {
-  //     onChange(event);
-  //   }
-  // };
 
   return (
     <div className="flex flex-col gap-1">

@@ -3,7 +3,7 @@ import { SidebarLayout } from "../../layout/SidebarLayout/SidebarLayout";
 import { useParams } from "react-router-dom";
 // import { useParams } from "react-router-dom";
 import { IProject } from "../../interface/Project.interface";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AddTask } from "../../components/AddTask/AddTask";
 import { PlusIcon} from "@heroicons/react/20/solid";
 import { TrashIcon } from "@heroicons/react/24/outline";
@@ -16,6 +16,7 @@ export const Project: FunctionComponent = () => {
   const { projectName } = useParams<CatgeoryParams>();
   const projectData = useSelector((state: any) => state.projects);
   const [addTask, setAddTask] = useState<boolean>(false);
+  const dispatch = useDispatch()
 
   const projects: Array<IProject> | undefined = projectData;
   let requiredProjects: IProject | undefined;
@@ -71,6 +72,10 @@ export const Project: FunctionComponent = () => {
         <AddTask
           project={projectName}
           onCancelClick={() => setAddTask(false)}
+          onSubmitClick={(value) => {
+            dispatch({type : "ADD_TASK", task :  {...value, project : projectName}});
+            setAddTask(false)
+          }}
         />
       )}
     </SidebarLayout>
