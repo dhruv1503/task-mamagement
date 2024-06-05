@@ -1,13 +1,23 @@
 import { Link } from "react-router-dom";
 import { Input } from "../../components/Input/Input";
 import { Navbar } from "../../components/Navbar/Navbar";
-import {  ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
+import { EMAIL_REGEX } from "../../constants/regex";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 type RegistrationForm = {
   firstName: string;
   lastName: string;
   password: string;
   email: string;
+};
+
+type RegistrationFormError = {
+  firstName: boolean;
+  lastName: boolean;
+  password: boolean;
+  email: boolean;
 };
 
 export const Register = () => {
@@ -18,34 +28,134 @@ export const Register = () => {
     email: "",
   });
 
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    password: "",
+    email: "",
+  });
+  const [isErrorField, setIsErrorField] = useState<RegistrationFormError>({
+    firstName: false,
+    lastName: false,
+    password: false,
+    email: false,
+  });
+  const dispatch = useDispatch();
+  const users = useSelector((state : {usersDatabase : any, user : any, project: any}) => (state.usersDatabase))
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (value) {
-      setForm((prevState) => ({ ...prevState, [name]: value }));
-    }
-  };
-  const resetRegistrationForm = (e : MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    console.log("reset clicked")
-    setForm({ firstName: "", lastName: "", password: "", email: "" });
+    setForm((prevState) => ({ ...prevState, [name]: value }));
+    setErrors((prevState) => ({ ...prevState, [name]: "" }));
+    setIsErrorField((prevState) => ({ ...prevState, [name]: false }));
   };
 
-  useEffect(() => {
-console.log(form)
-  }, [form])
+  const textInputValidation = (textInput: string, label: string): string | null => {
+    if (!textInput) {
+      return `${label} is required.`;
+    }
+    if (textInput.trim().length <= 2) {
+      return `${label} should have at least 3 characters.`;
+    }
+    if (/[*/|'/$-&|xp_]/.test(textInput)) {
+      return "Special characters (*, |, /, $, -, &, xp_) are not allowed.";
+    }
+    return null;
+  };
+
+  const emailInputValidation = (emailInput: string): string | null => {
+    if (!emailInput) {
+      return "Email is required.";
+    }
+    if (!EMAIL_REGEX.test(emailInput)) {
+      return "Enter a valid email address.";
+    }
+    return null;
+  };
+
+  const errorHandler = () => {
+    let errorMessages: RegistrationForm = {
+      firstName: "",
+      lastName: "",
+      password: "",
+      email: "",
+    };
+    const hasError: RegistrationFormError = {
+      firstName: false,
+      lastName: false,
+      password: false,
+      email: false,
+    };
+
+    const firstNameError = textInputValidation(form.firstName.trim(), "First Name");
+    const lastNameError = textInputValidation(form.lastName.trim(), "Last Name");
+    const emailError = emailInputValidation(form.email.trim());
+    if (firstNameError) {
+      errorMessages.firstName = firstNameError;
+      hasError.firstName = true;
+    }
+    if (lastNameError) {
+      errorMessages.lastName = lastNameError;
+      hasError.lastName = true;
+    }
+    if (emailError) {
+      errorMessages.email = emailError;
+      hasError.email = true;
+    }
+    if (!form.password) {
+      errorMessages.password = "Password is required.";
+      hasError.password = true;
+    }
+
+    setErrors(errorMessages);
+    setIsErrorField(hasError);
+    return hasError;
+  };
+
+  const resetRegistrationForm = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setForm({ firstName: "", lastName: "", password: "", email: "" });
+    setErrors({ firstName: "", lastName: "", password: "", email: "" });
+    setIsErrorField({
+      firstName: false,
+      lastName: false,
+      password: false,
+      email: false,
+    });
+  };
+
+  const submitButtonClickHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const allFieldsErrors = errorHandler();
+    if (Object.values(allFieldsErrors).some((error) => error)) {
+      return;
+    }
+    if(isExistingUser(form.email)){
+      // toast.remove("EMAIL_EXISTS")
+      return toast.error("Email already exists!", {id : "EMAIL_EXISTS"});
+    }
+    dispatch({ type: "ADD_USER", payload: form });
+     toast.success("Your registration has been successful.", {id : "REGISTERED_SUCCESSFULLY"});
+     resetRegistrationForm(e);
+     return
+  };
+
+  const isExistingUser = (email : string) : boolean => {
+    const existingUser = users.find((user : any) => (user?.userDetails.emailId === email))
+    if(existingUser){
+      return true
+    }
+    return false;
+  }
+
   return (
     <div className="">
       <Navbar />
       <div className="flex items-center justify-center min-h-[calc(100vh-5rem)] h-full max-h-[calc(100vh-5rem)]">
         <div className="justify-center bg-white px-10 py-12 w-96 rounded shadow-xl">
           <div className="mb-2">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Create your account
-            </h1>
-            <p className="text-md text-slate-400">
-              {" "}
-              to continue to Life Tracker
-            </p>
+            <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
+            <p className="text-md text-slate-400">to continue to Life Tracker</p>
           </div>
           <form>
             <div className="flex flex-col gap-4">
@@ -57,6 +167,8 @@ console.log(form)
                 name="firstName"
                 onChange={handleInputChange}
                 value={form.firstName}
+                errorMessage={errors.firstName}
+                error={isErrorField.firstName}
               />
               <Input
                 type="text"
@@ -66,6 +178,8 @@ console.log(form)
                 name="lastName"
                 value={form.lastName}
                 onChange={handleInputChange}
+                errorMessage={errors.lastName}
+                error={isErrorField.lastName}
               />
               <Input
                 type="email"
@@ -75,6 +189,8 @@ console.log(form)
                 name="email"
                 value={form.email}
                 onChange={handleInputChange}
+                errorMessage={errors.email}
+                error={isErrorField.email}
               />
               <Input
                 type="password"
@@ -84,6 +200,8 @@ console.log(form)
                 name="password"
                 value={form.password}
                 onChange={handleInputChange}
+                errorMessage={errors.password}
+                error={isErrorField.password}
               />
               <div className="py-3 flex justify-end">
                 <button
@@ -94,16 +212,8 @@ console.log(form)
                   Reset
                 </button>
                 <button
-                  type="submit"
+                  onClick={submitButtonClickHandler}
                   className="rounded px-3 py-2 bg-slate-900 text-slate-100 disabled:cursor-not-allowed disabled:opacity-10"
-                  disabled={
-                    !(
-                      form?.firstName &&
-                      form.lastName &&
-                      form.email &&
-                      form.email
-                    )
-                  }
                 >
                   Submit
                 </button>
@@ -111,7 +221,6 @@ console.log(form)
               <p>
                 Already registered?{" "}
                 <Link className="underline hover:no-underline" to="/login">
-                  {" "}
                   Click here to Login
                 </Link>
               </p>

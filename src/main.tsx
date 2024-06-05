@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import { Register } from "./pages/Register/Register.tsx";
 import { Login } from "./pages/Login/Login.tsx";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
@@ -27,5 +28,23 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
+    <Toaster
+     toastOptions={{
+      success: {
+        style: {
+          background: '#058527',
+          color: "#FFFFFF",
+          opacity: "0.8"
+        },
+      },
+      error: {
+        style: {
+          background: '#d1453b',
+          color: "#FFFFFF",
+          opacity: "0.8"
+        },
+      },
+    }}
+    />
   </React.StrictMode>
 );
