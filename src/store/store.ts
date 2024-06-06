@@ -3,6 +3,8 @@ import data from "../data/data.json";
 import users from "../data/users.json";
 import { v4 as uuid } from "uuid";
 import { SHA256 } from "crypto-js";
+import { usersDatabaseReducer } from "./userDatabaseReducer";
+import { loggedInReducer } from "./loggedInUserReducer";
 // import * as jwt from "jwt-simple";
 // import { Buffer } from "buffer";
 
@@ -22,31 +24,8 @@ const ADD_USER = "ADD_USER";
 const devToolEnahncer =
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
 
-const getUsers = () => {
-  const storedUsers = localStorage.getItem("USERS");
-  if (!storedUsers) {
-    localStorage.setItem("USERS", JSON.stringify(users));
-    return users;
-  }
-  try {
-    const parsedUsers = JSON.parse(storedUsers);
-    return parsedUsers;
-  } catch (error) {
-    console.error("Failed to parse users from localStorage", error);
-    return users;
-  }
-};
 
-const getLoggedInUser = () => {
-  const loggedInUser = localStorage.getItem("LOGGED_IN_USER");
-  if (!loggedInUser) {
-    return "";
-  }
-  return loggedInUser;
-};
 
-const intialUsersDbData = getUsers();
-const loggedInUser = getLoggedInUser();
 
 const projectReducer = (state = data.projects, action: any) => {
   if (action.type === ADD_TASK) {
@@ -70,52 +49,6 @@ const projectReducer = (state = data.projects, action: any) => {
 
 const userReducer = (state = data.user) => state;
 
-const usersDatabaseReducer = (state = intialUsersDbData, action: any) => {
-  switch (action.type) {
-    case ADD_USER: {
-      const newUser = {
-        id: uuid(),
-        userDetails: {
-          firstName: action.payload.firstName,
-          lastName: action.payload.lastName,
-          password: SHA256(action.payload.password).toString(),
-          emailId: action.payload.email,
-          countryCode: "91",
-          isCompany: false,
-          companyName: "",
-        },
-        securityQuestions: [],
-        projects: [],
-      };
-
-      localStorage.setItem("USERS", JSON.stringify([...state, newUser]));
-
-      return [...state, newUser];
-    }
-    default:
-      return state;
-  }
-};
-
-// const createLoginJwt = (userId: string) => {
-//   return jwt.encode({ userId }, "secret");
-// };
-
-const loggedInReducer = (state = loggedInUser, action: any) => {
-  switch (action.type) {
-    case "LOGIN_USER": {
-      const token = action.payload
-      localStorage.setItem("LOGGED_IN_USER", token);
-      return token;
-    }
-    case "LOGOUT_USER": {
-      localStorage.setItem("LOGGED_IN_USER", "");
-      return null;
-    }
-    default:
-      return state;
-  }
-};
 
 const combinedReducers = combineReducers({
   user: userReducer,
