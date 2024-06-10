@@ -11,11 +11,11 @@ const login = (loginCredentials : {email : string, password : string}) => {
         }
          const userById = users.find((user: any) => user.emailId === loginCredentials.email);
          if(!userById){
-            return reject("User with email id not found")
+            return reject({message: "User with email id not found"})
          }
 
          if(userById.password !== loginCredentials.password){
-            return reject("Wrong password entered")
+            return reject({message: "Wrong password entered"})
          }
 
          return resolve({id : userById.id, message : "User account found successfully"})

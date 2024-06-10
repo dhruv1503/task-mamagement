@@ -45,7 +45,7 @@ export const Input: FunctionComponent<InputProps> = ({
         onChange={onChange}
         disabled={disabled}
       />
-      {error && errorMessage ? <p className="text-sm text-red-500">{errorMessage}</p> : <p>{" "}</p>}
+      {error && errorMessage ? <p className="text-sm text-red-500">{errorMessage}</p> : <p className="text-sm pb-5"> </p>}
     </div>
   );
 };

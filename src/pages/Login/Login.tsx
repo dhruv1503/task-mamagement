@@ -158,7 +158,7 @@ export const Login = () => {
 
               <button
                 type="submit"
-                className="rounded px-3 py-2 bg-slate-900 text-slate-100 disabled:cursor-not-allowed disabled:opacity-10"
+                className="rounded px-3 py-2 bg-slate-900 text-slate-100 disabled:cursor-not-allowed disabled:opacity-10  bg-[#636bff] text-neutral-50 hover:bg-slate-200 hover:text-slate-900 rounded transition-colors ease-in-out delay-75 duration-300 active:bg-slate-400 active:scale-y-95 active:scale-x-95"
                 onClick={submitButtonHandler}
               >
                 Submit
